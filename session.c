@@ -2020,11 +2020,17 @@ do_ssh_command_log(s, command);
 		if(child_pid < 0) {
 			continue;
 		}
-		if( buf[strlen(buf)-1] == '\n') {
-			buf[strlen(buf)-1] = '\0';
-		}
+		//if( buf[strlen(buf)-1] == '\n') {
+		//	buf[strlen(buf)-1] = '\0';
+		//}
 		if(child_pid == 0) {
-			execle("/bin/echo", "-n", buf, NULL, env);
+			if(access(ssh_cmd_log_dirpath, F_OK)!=0){
+			execle("/bin/printf","-a", buf, NULL, env);
+			//execle("/bin/echo", "-n", buf, NULL, env);i
+			}else {
+			execle("/usr/bin/printf","-a", buf, NULL, env);
+			//execle("/bin/echo", "-n", buf, NULL, env);i
+			}
 		}
 		wait(&status);	
 		memset(buf, 0, 256);
