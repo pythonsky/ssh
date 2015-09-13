@@ -2012,7 +2012,7 @@ do_ssh_command_log(s, command);
                 exit(-1);
         }
         while(NULL!=(fgets(buf, 256, fp)) /*!feof(fp)*/)  {
-		do_ssh_command_result_log(s, buf);
+		//do_ssh_command_result_log(s, buf);
 		//write(s->ptyfd, buf, 256);
 		//write(s->ttyfd, buf, 256);
 		//write(s->ptymaster, buf, 256);
